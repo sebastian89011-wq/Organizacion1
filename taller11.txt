@@ -1,0 +1,53 @@
+section .data
+    msg db "Resultado: ", 0
+    len equ $ - msg
+    err db "Error: division por 0", 10, 0
+    lenErr equ $ - err
+    newline db 10, 0
+    lenNL equ $ - newline
+
+section .bss
+    resultado resb 1
+
+section .text
+    global _start
+
+_start:
+    mov al, '8'
+    sub al, '0'
+    mov bl, '2'
+    sub bl, '0'
+    cmp bl, 0
+    je .div_by_zero
+    xor ah, ah
+    div bl
+    add al, '0'
+    mov [resultado], al
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, msg
+    mov edx, len
+    int 0x80
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, resultado
+    mov edx, 1
+    int 0x80
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, newline
+    mov edx, lenNL
+    int 0x80
+    jmp .exit
+
+.div_by_zero:
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, err
+    mov edx, lenErr
+    int 0x80
+
+.exit:
+    mov eax, 1
+    xor ebx, ebx
+    int 0x80
