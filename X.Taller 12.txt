@@ -1,0 +1,34 @@
+section .data
+    cadena db "3/4/5",0
+
+section .bss
+    suma resb 1
+
+section .text
+global _start
+
+%macro ASC2NUM 2
+    mov %1, [%2]
+    sub %1, '0'
+%endmacro
+
+_start:
+    mov esi, cadena
+
+    ASC2NUM al, esi
+    add esi, 2
+
+    ASC2NUM bl, esi
+    add esi, 2
+
+    ASC2NUM cl, esi
+
+    movzx eax, al
+    add eax, bl
+    add eax, cl
+
+    mov [suma], al
+
+    mov eax,1
+    mov ebx,0
+    int 80h

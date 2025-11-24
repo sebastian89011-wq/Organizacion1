@@ -1,0 +1,31 @@
+section .data
+    message db "La suma de los valores es: ", 0    ; cadena a imprimir
+    newline db 10, 0           ; salto de línea (LF) + terminador
+
+section .bss
+    buffer resb 4              ; buffer para conversión num->ascii si hace falta
+
+section .text
+    global _start
+
+_start:
+    ; Llamada a macro que imprime una cadena (definida en preprocesador)
+    ; PRINT_STRING message
+    ; --- Comentario: se espera que PRINT_STRING expanda a:
+    ;       ; calcular longitud de message
+    ;       mov eax,4
+    ;       mov ebx,1
+    ;       mov ecx,message
+    ;       mov edx, <longitud>
+    ;       int 0x80
+    ; Si no está en el archivo, verificar include o definición de macros.
+    PRINT_STRING message
+
+    ; Llamada a macro que imprime la suma. La definición real del macro
+    ; debería contener la lógica para sumar valores y formatear el resultado.
+    PRINT_SUM
+
+    ; Salida del programa (syscall exit)
+    mov eax, 1                ; syscall exit
+    mov ebx, 0                ; código de salida 0
+    int 0x80
